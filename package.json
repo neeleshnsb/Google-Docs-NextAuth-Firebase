@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@auth/firebase-adapter": "^1.0.0",
+    "@material-tailwind/react": "^2.1.1",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
+    "draft-js": "^0.11.7",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "firebase": "^10.3.1",
@@ -23,6 +25,9 @@
     "postcss": "8.4.29",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-draft-wysiwyg": "^1.15.0",
+    "react-feather": "^2.0.10",
+    "react-firebase-hooks": "^5.1.1",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
   }
