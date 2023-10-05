@@ -28,7 +28,7 @@ const Doc = () => {
     docData?.data().hasAccess &&
     !docData?.data().hasAccess.includes(session.user.email)
   ) {
-    return <p>You don't have access to the document.</p>;
+    return <p>You dont have access to the document.</p>;
   }
 
   async function Share() {

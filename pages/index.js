@@ -17,17 +17,16 @@ import { Dialog } from "@material-tailwind/react";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import DocumentRow from "../components/DocumentRow";
 
-function index() {
+function Index() {
   const { data: session } = useSession();
-  if (!session) {
-    return <Login />;
-  }
   const [value2] = useDocument(doc(db, "userDocs", session.user.email), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
-
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState();
+  if (!session) {
+    return <Login />;
+  }
 
   const handleOpen = () => setOpen(!open);
 
@@ -121,7 +120,7 @@ function index() {
     </div>
   );
 }
-export default index;
+export default Index;
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
