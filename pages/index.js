@@ -6,35 +6,48 @@ import Image from "next/image";
 import Header from "../components/Header";
 import Login from "../components/Login";
 import { db } from "../firebase.config";
-import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  addDoc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { Dialog } from "@material-tailwind/react";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import DocumentRow from "../components/DocumentRow";
 
-const index = () => {
+function index() {
   const { data: session } = useSession();
   if (!session) {
     return <Login />;
   }
-  const collectionRef = collection(db, "userDocs", session.user.email, "docs");
-  const [value] = useCollection(collectionRef, {
+  const [value2] = useDocument(doc(db, "userDocs", session.user.email), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
+
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState();
 
   const handleOpen = () => setOpen(!open);
-  const [showModal, setShowModal] = useState(false);
 
   async function createDocument() {
+    handleOpen();
     if (!input) return;
-    const docref = doc(collection(db, "userDocs"), session.user.email);
-    const colref = collection(docref, "docs");
-    await addDoc(colref, {
+    const temp = value2?.data().hasAccessTo || [];
+    const Doc = await addDoc(collection(db, "Documents"), {
       fileName: input,
       timestamp: serverTimestamp(),
+      hasAccess: [session.user.email],
     });
-    handleOpen();
+    await setDoc(
+      doc(db, "userDocs", session.user.email),
+      {
+        hasAccessTo: [Doc.id, ...temp],
+      },
+      { snapshotListenOptions: { includeMetadataChanges: true } }
+    );
+    setInput("");
   }
   return (
     <div>
@@ -100,19 +113,14 @@ const index = () => {
             <Folder />
           </div>
 
-          {value?.docs.map((doc) => (
-            <DocumentRow
-              key={String(doc?.id)}
-              id={String(doc?.id)}
-              filename={String(doc?.data().fileName)}
-              date={doc?.data()?.timestamp}
-            />
+          {value2?.data()?.hasAccessTo?.map((id) => (
+            <DocumentRow key={String(id)} id={String(id)} />
           ))}
         </div>
       </section>
     </div>
   );
-};
+}
 export default index;
 
 export async function getServerSideProps(context) {
