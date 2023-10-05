@@ -6,8 +6,9 @@ import { cert } from "firebase-admin/app";
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
+      clientId:
+        "915550977275-vjn92jp7cd9vr9023khjv261dbdt51h8.apps.googleusercontent.com",
+      clientSecret: "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",
     }),
   ],
   adapter: FirestoreAdapter({
