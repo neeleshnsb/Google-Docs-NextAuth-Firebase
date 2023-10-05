@@ -24,7 +24,7 @@ function Index() {
   });
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState();
-  if (!session) {
+  if (!session | !session?.user) {
     return <Login />;
   }
 
