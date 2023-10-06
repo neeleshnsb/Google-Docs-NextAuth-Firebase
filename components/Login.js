@@ -20,8 +20,8 @@ const Login = () => {
       <Button
         className=" mt-10 h-10 w-min mx-auto px-4 py-2 bg-blue-500 hover:shadow-md hover:shadow-slate-950"
         color="blue"
-        buttonType="filled"
-        ripple="light"
+        buttontype="filled"
+        ripple={true}
         onClick={handleSignIn}
       >
         Login
