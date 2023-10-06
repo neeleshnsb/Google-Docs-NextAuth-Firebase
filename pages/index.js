@@ -40,6 +40,7 @@ function Index() {
       timestamp: serverTimestamp(),
       hasAccess: [session.user.email],
     });
+    console.log(Doc.id)
     await setDoc(
       doc(db, "userDocs", session.user.email),
       {
