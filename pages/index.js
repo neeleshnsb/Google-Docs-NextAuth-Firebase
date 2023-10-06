@@ -34,7 +34,7 @@ function Index() {
   async function createDocument() {
     handleOpen();
     if (!input) return;
-    const temp = value2?.data().hasAccessTo || [];
+    const temp = value2?.data()?.hasAccessTo || [];
     const Doc = await addDoc(collection(db, "Documents"), {
       fileName: input,
       timestamp: serverTimestamp(),
