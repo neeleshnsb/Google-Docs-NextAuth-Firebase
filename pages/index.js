@@ -19,6 +19,7 @@ import DocumentRow from "../components/DocumentRow";
 
 function Index() {
   const { data: session } = useSession();
+  useEffect(()=>{console.log(session?.user?.email)}, [session])
   const [value2] = useDocument(doc(db, "userDocs", session?.user?.email||'19uec104@lnmiit.ac.in'), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
