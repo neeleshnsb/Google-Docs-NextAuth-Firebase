@@ -61,8 +61,8 @@ function Index() {
         open={open}
         handler={handleOpen}
         animate={{
-          mount: { scale: 1, y: 0 },
-          unmount: { scale: 0.9, y: -100 },
+          mount: { scale: 1 },
+          unmount: { scale: 1},
         }}
       >
         <input
