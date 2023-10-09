@@ -32,6 +32,8 @@ const Doc = () => {
   }
 
   async function Share() {
+    handleOpen()
+    setInput('')
     const shareToData = await getDoc(doc(db, "userDocs", input));
 
     const temp = shareToData?.data()?.hasAccessTo || [];
