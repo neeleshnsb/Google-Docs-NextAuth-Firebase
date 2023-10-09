@@ -60,6 +60,7 @@ const DocumentRow = ({ id }) => {
         </ul>
       </div>}
     </div>
+    {check && <div className="h-screen w-screen fixed top-0 left-0" onClick={()=>setCheck(!check)} ></div>}
 
   {rename && 
   <div onClick={()=>{setRename(false)}} className=" flex items-center w-screen h-screen backdrop-blur-[2px] fixed left-0 top-0 z-50 " >
