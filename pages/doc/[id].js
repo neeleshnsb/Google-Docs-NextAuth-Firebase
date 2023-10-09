@@ -24,12 +24,7 @@ const Doc = () => {
   const [input, setInput] = useState();
 
   const handleOpen = () => setOpen(!open);
-  if (
-    docData?.data().hasAccess &&
-    !docData?.data().hasAccess.includes(session.user.email)
-  ) {
-    return <p>You dont have access to the document.</p>;
-  }
+  
 
   async function Share() {
     handleOpen()
@@ -51,6 +46,12 @@ const Doc = () => {
     );
   }
   if (!session) return <Login />;
+  if (
+    docData?.data().hasAccess &&
+    !docData?.data().hasAccess.includes(session.user.email)
+  ) {
+    return <p>You dont have access to the document.</p>;
+  }
 
   if (open)
     return (
