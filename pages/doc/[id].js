@@ -47,7 +47,7 @@ const Doc = () => {
   }
   if (!session) return <Login />;
   if (
-    docData?.data().hasAccess &&
+    docData?.data()?.hasAccess &&
     !docData?.data().hasAccess.includes(session.user.email)
   ) {
     return <p>You dont have access to the document.</p>;
@@ -91,7 +91,7 @@ const Doc = () => {
           </span>
 
           <div className=" flex-grow px-2">
-            <h2 className=" font-bold text-lg">{docData?.data().fileName}</h2>
+            <h2 className=" font-bold text-lg">{docData?.data()?.fileName}</h2>
             <div className="flex space-x-1 -ml-1 h-8 text-gray-600 font-light items-center text-sm">
               <p className="option">File</p>
               <p className="option">Edit </p>

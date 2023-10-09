@@ -31,11 +31,11 @@ export const TextEditor = () => {
   });
 
   useEffect(() => {
-    if (snapshot?.data().editorState && snapshot?.data().cursorData) {
+    if (snapshot?.data()?.editorState && snapshot?.data()?.cursorData) {
       const newEditorState = EditorState.createWithContent(
         convertFromRaw(snapshot?.data()?.editorState)
       );
-      if (snapshot?.data().cursorData[`${session.user.email}`]) {
+      if (snapshot?.data()?.cursorData[`${session.user.email}`]) {
         const selectionState = SelectionState.createEmpty(
           snapshot?.data().cursorData[`${session.user.email}`].startKey
         ).merge({
@@ -68,7 +68,7 @@ export const TextEditor = () => {
     let email = session.user.email;
     let temp = {};
     temp[`${email}`] = cData;
-    if (snapshot?.data().cursorData) {
+    if (snapshot?.data()?.cursorData) {
       temp = snapshot.data().cursorData;
       temp[`${session.user.email}`] = cData;
     }

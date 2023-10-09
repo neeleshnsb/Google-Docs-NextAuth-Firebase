@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FileText, MoreVertical } from "react-feather";
 import { useRouter } from "next/router";
-import { doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { useDocument } from "react-firebase-hooks/firestore";
 
@@ -15,8 +15,9 @@ const DocumentRow = ({ id }) => {
   const [docData] = useDocument(doc(db, "Documents", id), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
+  
   useEffect(() => {
-    if (docData?.data().fileName) {
+    if (docData?.data()?.fileName) {
       setFileName(String(docData.data().fileName));
     }
     setCreatedAt(
@@ -27,11 +28,18 @@ const DocumentRow = ({ id }) => {
     setRename(true)
     
   }
+  function Delete(){
+    deleteDoc(doc(db, 'Documents', id))
+
+  }
   function Save(){
     setRename(false)
     setNewName('')
     const docref = doc(db, 'Documents', id)
     setDoc(docref, {fileName: newName}, {merge:true})
+  }
+  if(!docData?.data()?.fileName){
+    return <></>
   }
   return (
     <>
@@ -47,7 +55,7 @@ const DocumentRow = ({ id }) => {
       <div className="absolute right-10 h-min py-2   transition-transform   top-2 bg-white z-10 text-xl px-2  rounded-lg" >
         <ul className=" select-none " >
           <li className="hover:bg-slate-100 w-full px-6 rounded-lg"  onClick={(e)=>{Rename(); setCheck(!check); e.stopPropagation()} } >Rename</li>
-          <li className="hover:bg-slate-100 w-full px-6 rounded-lg">Delete</li>
+          <li onClick={(e)=>{Delete(); e.stopPropagation()}} className="hover:bg-slate-100 w-full px-6 rounded-lg">Delete</li>
           <li className="hover:bg-slate-100 w-full px-6 rounded-lg" >Share</li>
         </ul>
       </div>}
