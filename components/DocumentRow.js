@@ -52,8 +52,8 @@ const DocumentRow = ({ id }) => {
       <p className=" pr-5 text-sm">{createdAt}</p>
       <MoreVertical onClick={(e)=>{setCheck(!check); e.stopPropagation()}} />
       {check && 
-      <div className=" shadow-md absolute right-10 h-min py-2   transition-transform   top-2 bg-white z-10 text-xl px-2  rounded-lg" >
-        <ul className=" select-none " >
+      <div className=" shadow-md absolute right-10 h-min py-2   transition-transform   top-2 bg-white z-10  px-2  rounded-lg" >
+        <ul className=" select-none text-lg  font-extralight" >
           <li className="hover:bg-slate-100 w-full px-6 rounded-lg"  onClick={(e)=>{Rename(); setCheck(!check); e.stopPropagation()} } >Rename</li>
           <li onClick={(e)=>{Delete(); e.stopPropagation()}} className="hover:bg-slate-100 w-full px-6 rounded-lg">Delete</li>
           <li className="hover:bg-slate-100 w-full px-6 rounded-lg" >Share</li>

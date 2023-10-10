@@ -99,6 +99,7 @@ const Doc = () => {
               <p className="option">Insert</p>
               <p className="option">Format</p>
               <p className="option">Tools</p>
+              <p className="option">Download PDF</p>
             </div>
           </div>
 

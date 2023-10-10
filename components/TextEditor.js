@@ -3,6 +3,8 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { collection, doc, setDoc, getFirestore } from "firebase/firestore";
 import { useDocument, useDocumentOnce } from "react-firebase-hooks/firestore";
 import React, { useEffect, useState } from "react";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import {
   EditorState,
   convertFromRaw,
@@ -25,6 +27,17 @@ export const TextEditor = () => {
   const router = useRouter();
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const docref = doc(db, "Documents", router.query.id);
+
+  const convertToPDF = () => {
+    const content = document.getElementsByClassName('rdw-editor-main')[0];
+  
+    html2canvas(content, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, 'PNG', 10, 10, 180, 160);
+      pdf.save('editor-content.pdf');
+    });
+  };
 
   const [snapshot] = useDocument(docref, {
     snapshotListenOptions: { includeMetadataChanges: true },
@@ -85,12 +98,16 @@ export const TextEditor = () => {
   if (!session) return <Login />;
   return (
     <div className=" bg-[#F8F9FA] min-h-screen pb-16">
+      <button onClick={convertToPDF}>Convert to PDF</button>
+      <span id="editor-content">
       <Editor
         onEditorStateChange={(editorState) => onEditorStateChange(editorState)}
         editorState={editorState}
         toolbarClassName="flex sticky top-0 z-50 !justify-center mx-auto"
         editorClassName="mt-6 p-10 bg-white shadow-lg max-w-5xl mx-auto mb-12  min-h-[80vh] border"
       />
+      </span>
+      
     </div>
   );
 };
