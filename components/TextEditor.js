@@ -5,6 +5,7 @@ import { useDocument, useDocumentOnce } from "react-firebase-hooks/firestore";
 import React, { useEffect, useState } from "react";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { htmlToText } from "html-to-text";
 import {
   EditorState,
   convertFromRaw,
@@ -16,6 +17,8 @@ import { db } from "../firebase.config";
 import { useSession } from "next-auth/react";
 import Login from "./Login";
 import { useRouter } from "next/router";
+import { stateToHTML } from "draft-js-export-html";
+import PDFGenerator from "../pages/PDFGenerator";
 
 const Editor = dynamic(
   () => import("react-draft-wysiwyg").then((module) => module.Editor),
@@ -27,6 +30,11 @@ export const TextEditor = () => {
   const router = useRouter();
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const docref = doc(db, "Documents", router.query.id);
+  const [pdfState, setPdfState] = useState()
+  const [focused, setFocused] = React.useState(true)
+const onFocus = () => setFocused(true)
+const onBlur = () => setFocused(false)
+document.getElementsByClassName('rdw-editor-toolbar')[0]?.addEventListener('click',onBlur)
 
   const convertToPDF = () => {
     const content = document.getElementsByClassName('rdw-editor-main')[0];
@@ -43,12 +51,14 @@ export const TextEditor = () => {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
+  useEffect(()=>{setPdfState(convertToRaw(editorState.getCurrentContent()))}, [editorState])
+
   useEffect(() => {
-    if (snapshot?.data()?.editorState && snapshot?.data()?.cursorData) {
+    if (snapshot?.data()?.editorState && snapshot?.data()?.cursorData && focused) {
       const newEditorState = EditorState.createWithContent(
         convertFromRaw(snapshot?.data()?.editorState)
       );
-      if (snapshot?.data()?.cursorData[`${session.user.email}`]) {
+      if (snapshot?.data()?.cursorData[`${session.user.email}`] && focused) {
         const selectionState = SelectionState.createEmpty(
           snapshot?.data().cursorData[`${session.user.email}`].startKey
         ).merge({
@@ -97,10 +107,13 @@ export const TextEditor = () => {
 
   if (!session) return <Login />;
   return (
+    <>
     <div className=" bg-[#F8F9FA] min-h-screen pb-16">
       <button onClick={convertToPDF}>Convert to PDF</button>
       <span id="editor-content">
       <Editor
+      onFocus={onFocus}
+      onBlur={onBlur}
         onEditorStateChange={(editorState) => onEditorStateChange(editorState)}
         editorState={editorState}
         toolbarClassName="flex sticky top-0 z-50 !justify-center mx-auto"
@@ -109,5 +122,12 @@ export const TextEditor = () => {
       </span>
       
     </div>
+    <div>
+      <PDFGenerator  content={pdfState} />
+    </div>
+    
+    </>
+    
+    
   );
 };
